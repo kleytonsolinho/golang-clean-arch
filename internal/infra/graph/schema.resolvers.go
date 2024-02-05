@@ -6,15 +6,12 @@ package graph
 
 import (
 	"context"
-	"fmt"
-
-	model1 "github.com/kleytonsolinho/golang-clean-arch/graph/model"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/infra/graph/model"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/usecase"
 )
 
 // CreateOrder is the resolver for the createOrder field.
-func (r *mutationResolver) CreateOrder(ctx context.Context, input *model1.OrderInput) (*model1.Order, error) {
+func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderInput) (*model.Order, error) {
 	dto := usecase.OrderInputDTO{
 		ID:    input.ID,
 		Price: float64(input.Price),
@@ -33,18 +30,18 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model1.OrderI
 }
 
 // Orders is the resolver for the orders field.
-func (r *queryResolver) Orders(ctx context.Context) ([]*model1.Order, error) {
+func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
 	output, err := r.OrderListUseCase.Execute()
 	if err != nil {
 		return nil, err
 	}
-	var orders []*model1.Order
+	var orders []*model.Order
 	for _, order := range output {
-		orders = append(orders, &model1.Order{
+		orders = append(orders, &model.Order{
 			ID:         order.ID,
-			Price:      float32(order.Price),
-			Tax:        float32(order.Tax),
-			FinalPrice: float32(order.FinalPrice),
+			Price:      float64(order.Price),
+			Tax:        float64(order.Tax),
+			FinalPrice: float64(order.FinalPrice),
 		})
 	}
 	return orders, nil
@@ -65,19 +62,3 @@ type queryResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) orders(ctx context.Context) ([]*model.Order, error) {
-	output, err := r.OrderListUseCase.Execute()
-	if err != nil {
-		return nil, err
-	}
-	var orders []*model.Order
-	for _, order := range output {
-		orders = append(orders, &model.Order{
-			ID:         order.ID,
-			Price:      float64(order.Price),
-			Tax:        float64(order.Tax),
-			FinalPrice: float64(order.FinalPrice),
-		})
-	}
-	return orders, nil
-}
