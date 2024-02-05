@@ -14,7 +14,6 @@ Este programa em Go é um servidor HTTP/GraphQL e gRPC rodando em Multithreads c
 ## Como Utilizar localmente:
 
 1. **Requisitos:** 
-&nbsp;
    - Certifique-se de ter o Go instalado em sua máquina.
    - Certifique-se de ter Evans e gRPC instalado em sua máquina.
    - Certifique-se de ter GraphQL (gqlgen) instalado em sua máquina.
@@ -62,8 +61,8 @@ evans -r repl
 ## Como testar localmente:
 
 ### Portas
-HTTP server on port :8000
-gRPC server on port 50051
+HTTP server on port :8000 <br />
+gRPC server on port 50051 <br />
 GraphQL server on port 8080
 
 ### HTTP
@@ -77,20 +76,15 @@ GraphQL server on port 8080
 ### gRPC
  - Rode o evans:
 
-&nbsp;
 ```bash
 evans -r repl
 ```
-&nbsp;
 ```bash
 evans package pb
 ```
-&nbsp;
 ```bash
 evans service OrderService
 ```
-
-&nbsp;
 ```bash
 evans call ListOrders
 ```
