@@ -61,6 +61,11 @@ evans -r repl
 
 ## Como testar localmente:
 
+### Portas
+HTTP server on port :8000
+gRPC server on port 50051
+GraphQL server on port 8080
+
 ### HTTP
  - Acesse a pasta api/ e dispare os dois arquivos
 ** Necessário instalar o plugin REST Client no VSCode. **
