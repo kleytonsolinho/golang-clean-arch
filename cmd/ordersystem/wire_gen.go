@@ -8,13 +8,17 @@ package main
 
 import (
 	"database/sql"
+	"github.com/google/wire"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/entity"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/event"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/infra/database"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/infra/web"
 	"github.com/kleytonsolinho/golang-clean-arch/internal/usecase"
 	"github.com/kleytonsolinho/golang-clean-arch/pkg/events"
-	"github.com/google/wire"
+)
+
+import (
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Injectors from wire.go:
@@ -24,6 +28,12 @@ func NewCreateOrderUseCase(db *sql.DB, eventDispatcher events.EventDispatcherInt
 	orderCreated := event.NewOrderCreated()
 	createOrderUseCase := usecase.NewCreateOrderUseCase(orderRepository, orderCreated, eventDispatcher)
 	return createOrderUseCase
+}
+
+func NewFindAllOrderUseCase(db *sql.DB) *usecase.FindAllOrderUseCase {
+	orderRepository := database.NewOrderRepository(db)
+	findAllOrderUseCase := usecase.NewFindAllOrderUseCase(orderRepository)
+	return findAllOrderUseCase
 }
 
 func NewWebOrderHandler(db *sql.DB, eventDispatcher events.EventDispatcherInterface) *web.WebOrderHandler {
