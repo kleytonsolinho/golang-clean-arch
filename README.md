@@ -50,8 +50,13 @@ cd cmd/ordersystem
 go run main.go wire_gen.go
 ```
 
+Rode as migrations
+```bash
+migrate -database mysql://user:password@tcp(host:port)/dbname -path ./migrations up
+```
+
 &nbsp;
-5. **Rode o Evans para acessar o gRPC:**
+7. **Rode o Evans para acessar o gRPC:**
 &nbsp;
 
 ```bash
