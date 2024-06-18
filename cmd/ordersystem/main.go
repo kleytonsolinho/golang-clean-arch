@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
+	"path/filepath"
 
 	graphql_handler "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -21,6 +23,9 @@ import (
 
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -34,6 +39,25 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
+
+	driver, err := mysql.WithInstance(db, &mysql.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	migrationPath := filepath.Join("..", "..", "migrations")
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://"+migrationPath,
+		configs.DBName, driver)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Migration executed successfully")
 
 	rabbitMQChannel := getRabbitMQChannel(configs)
 
