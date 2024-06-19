@@ -50,28 +50,42 @@ cd cmd/ordersystem
 go run main.go wire_gen.go
 ```
 
-&nbsp;
-7. **Rode o Evans para acessar o gRPC:**
-&nbsp;
-
-```bash
-evans -r repl
-```
+Observação: Ao iniciar a aplicação, o processo de migração é executado automaticamente, não sendo necessário realizá-lo manualmente.
 
 ## Como testar localmente:
 
 ### Portas
 HTTP server on port :8000 <br />
-gRPC server on port 50051 <br />
-GraphQL server on port 8080
+gRPC server on port :50051 <br />
+GraphQL server on port :8080
 
 ### HTTP
  - Acesse a pasta api/ e dispare os dois arquivos
 ** Necessário instalar o plugin REST Client no VSCode. **
 
 ### GraphQL
- - Abra a página do GraphQL na porta 8080 
- <a href="http:localhost:8080" target="_blank">http:localhost:8080</a>
+ - Abra a página do GraphQL na porta 8080 e execute a mutation ou query abaixo:
+ <a href="http://localhost:8080/" target="_blank">http://localhost:8080/</a>
+
+ ```graphql
+  mutation createOrder {
+    createOrder (input:{ id: "teste", Price: 110, Tax: 2 }) {
+      id
+      Price
+      Tax
+    }
+  }
+
+
+  query queryOrders {
+      orders {
+          id
+          Price
+          Tax
+          FinalPrice
+      }
+  }
+ ```
 
 ### gRPC
  - Rode o evans:
@@ -80,11 +94,18 @@ GraphQL server on port 8080
 evans -r repl
 ```
 ```bash
-evans package pb
+package pb
 ```
 ```bash
-evans service OrderService
+service OrderService
 ```
+
+Para listar as orders utilize
 ```bash
-evans call ListOrders
+call ListOrders
+```
+
+Para criar orders utilize
+```bash
+call CreateOrder
 ```
